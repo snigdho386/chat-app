@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../../backend/config/generateToken");
+const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
@@ -40,25 +41,30 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = User.find();
-  console.log(User);
+  const user = await User.findOne({ email });
+  console.log(" 123 User ::", user);
 
-  // if (user && (await user.matchPassword(password))) {
-  //   res.status(201).json({
-  //     _id: user._id,
-  //     name: user.name,
-  //     email: user.email,
-  //     pic: user.pic,
-  //     token: generateToken(user._id),
-  //   });
-  // } else {
-  //   res.status(400);
-  //   throw new Error("Invalid email id or password");
-  // }
+  matchPassword = async (password) => {
+    console.log("User P/w", user.password, password);
+    return await bcrypt.compare(password, user.password);
+  };
 
-  res.status(201).json({
-    success: true,
-  });
+  if (user && matchPassword(password)) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      pic: user.pic,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid email id or password");
+  }
+
+  // res.status(201).json({
+  //   success: true,
+  // });
 });
 
 module.exports = { registerUser, authUser };
