@@ -4,8 +4,8 @@ const generateToken = require("../../backend/config/generateToken");
 const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, pic } = req.body;
-
+  const { name, email, password } = req.body;
+  const pic = JSON.parse(req.body.picStr);
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please enter all the Fields");
@@ -45,11 +45,10 @@ const authUser = asyncHandler(async (req, res) => {
   console.log(" 123 User ::", user);
 
   matchPassword = async (password) => {
-    console.log("User P/w", user.password, password);
     return await bcrypt.compare(password, user.password);
   };
 
-  if (user && matchPassword(password)) {
+  if (user && (await matchPassword(password))) {
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -61,10 +60,6 @@ const authUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid email id or password");
   }
-
-  // res.status(201).json({
-  //   success: true,
-  // });
 });
 
 module.exports = { registerUser, authUser };
