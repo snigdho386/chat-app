@@ -5,7 +5,8 @@ const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  const pic = JSON.parse(req.body.picStr);
+  console.log("Req Body :: ", req.body);
+  // const pic = req.body.picStr;
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please enter all the Fields");
@@ -22,8 +23,9 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
-    pic,
   });
+
+  console.log(user);
 
   if (user) {
     res.status(201).json({
@@ -62,4 +64,18 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, authUser };
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(keyword);
+  res.send(users);
+});
+
+module.exports = { registerUser, authUser, allUsers };
