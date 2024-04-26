@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Box,
   Container,
@@ -10,10 +10,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import Login from '../components/Authentication/Login'
-import SignUp from '../components/Authentication/SignUp'
+import Login from "../components/Authentication/Login";
+import SignUp from "../components/Authentication/SignUp";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   return (
     <Container maxW="xl" centerContent>
       <Box
@@ -47,7 +50,7 @@ const HomePage = () => {
         </Tabs>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
