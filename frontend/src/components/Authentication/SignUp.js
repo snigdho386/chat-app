@@ -102,6 +102,8 @@ const SignUp = () => {
             },
             config
           );
+
+          console.log(res);
           if (res.status) {
             toast({
               title: "Registration successful",
@@ -110,7 +112,8 @@ const SignUp = () => {
               position: "top-right",
               isClosable: true,
             });
-            localStorage.setItem("userInfo", JSON.stringify());
+
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
             setLoading(false);
             navigate("/chats");
           }
