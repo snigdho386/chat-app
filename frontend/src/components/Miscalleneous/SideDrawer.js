@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserListItem from "../UserAvatar/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
@@ -47,6 +47,10 @@ const SideDrawer = () => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+
+  // useEffect(() => {
+  //   console.log("Got notification ", user, " >> ", notification);
+  // });
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
@@ -157,8 +161,11 @@ const SideDrawer = () => {
                   <MenuItem
                     key={notif._id}
                     onClick={() => {
+                      console.log("Notification :: ", notif);
                       setSelectedChat(notif.chat);
-                      setNotification(notification.filter((n) => n != notif));
+                      setNotification(
+                        notification.filter((n) => n.chat._id != notif.chat._id)
+                      );
                     }}
                   >
                     {notif.chat.isGroupChat

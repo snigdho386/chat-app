@@ -46,12 +46,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }, []);
 
   useEffect(() => {
-    fetchMessages();
-    console.log("Rendered");
-    selectedChatCompare = selectedChat;
-  }, [selectedChat]);
-
-  useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
       console.log("Notification :: ", notification);
 
@@ -72,6 +66,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.log("Notification :: ", notification);
     });
   });
+
+  useEffect(() => {
+    fetchMessages();
+    console.log("Rendered");
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
 
   const defaultOptions = {
     loop: true,
