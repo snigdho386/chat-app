@@ -139,7 +139,7 @@ const SignUp = () => {
       <FormControl>
         <FormLabel>Name</FormLabel>
         <Input
-          placeholder="Enter tour name"
+          placeholder="Enter your name"
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
